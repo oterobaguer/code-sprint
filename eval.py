@@ -25,17 +25,16 @@ def main():
 
     dataset = get_standard_dataset('lodopab')
     test_data = dataset.get_data_pairs('test', 100)
-
+    n_ensemble = 10
     # load reconstructor
-    reconstructor1 = LearnedPDReconstructor(dataset.ray_trafo)
-    reconstructor1.load_hyper_params('params')
-    reconstructor1.load_learned_params('best-model-0')
+    reconstructors = []
+    for i in range(n_ensemble):
+        reconstructor = LearnedPDReconstructor(dataset.ray_trafo)
+        reconstructor.load_hyper_params('params')
+        reconstructor.load_learned_params('best-model-%d' % i)
+        reconstructors.append(reconstructor)
 
-    reconstructor2 = LearnedPDReconstructor(dataset.ray_trafo)
-    reconstructor2.load_hyper_params('params')
-    reconstructor2.load_learned_params('best-model-1')
-
-    ensemble = EnsembleReconstructor(reconstructor1, reconstructor2)
+    ensemble = EnsembleReconstructor(*reconstructors)
 
     task_table = TaskTable()
     task_table.append(
