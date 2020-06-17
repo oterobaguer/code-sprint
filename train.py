@@ -65,8 +65,7 @@ def main():
 
     reconstructor = LearnedPDReconstructor(
         ray_trafo=ray_trafo,
-        num_workers=0,
-        hyper_params=hyper_params)
+        num_workers=8)
     reconstructor.load_hyper_params('params')
 
     reconstructor.save_best_learned_params_path = 'best-model-{}'.format(
